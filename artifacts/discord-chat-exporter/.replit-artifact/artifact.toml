@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Discord Chat Exporter"
+description = "A secure dashboard for browsing accessible Discord servers and channels, selecting a conversation range, and exporting messages with timestamps, threads, and user details as JSON or CSV."
+version = "1.0.0"
+id = "artifacts/discord-chat-exporter"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 23285
+
+[services.development]
+run = "pnpm --filter @workspace/discord-chat-exporter run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/discord-chat-exporter", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/discord-chat-exporter/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "23285"
+BASE_PATH = "/"
